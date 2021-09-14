@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Router Settings -->
+    <!-- Record for Form Data -->
+    <record id="route_material_new" model="ir.actions.act_url">
+        <field name="name">Material New</field>
+        <field name="type">ir.actions.act_url</field>
+        <field name="target">self</field>
+        <field name="url">/materials/new</field>
+    </record>
+
+    <!-- Record for List Data -->
+    <record id="route_material_list" model="ir.actions.act_url">
+        <field name="name">Material List</field>
+        <field name="type">ir.actions.act_url</field>
+        <field name="target">self</field>
+        <field name="url">/materials</field>
+    </record>
+
+    <!-- Admin -->
+    <record id="materials_action" model="ir.actions.act_window">
+        <field name="name">Materials</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">materials.material</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                There's no material over here
+            </p>
+        </field>
+    </record>
+    
+    <!-- Root Element -->
+    <menuitem id="materials_management_root"
+              name="Materials Management"
+              sequence="10"/>
+
+    <!-- Material Root Element -->
+    <menuitem id="materials_root"
+              name="Materials"
+              parent="materials_management_root"
+              sequence="10"/>
+    
+    <!-- @route : /materials/new -->
+    <menuitem id="materials_new"
+              name="New Material"
+              parent="materials_root"
+              action="route_material_new"
+              sequence="10"/>
+
+    <!-- @route : /materials -->
+    <menuitem id="materials_list"
+              name="List of Material"
+              parent="materials_root"
+              action="route_material_list"
+              sequence="10"/>
+
+    <!-- Material Route to Material Admin 
+         DEFAULTU URL -->
+    <menuitem id="materials_admin"
+              name="Material Admin"
+              parent="materials_root"
+              action="materials_action"
+              sequence="10"/>
+</odoo>

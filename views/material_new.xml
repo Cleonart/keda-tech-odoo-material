@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="material_new" name="material_new">
+        <t t-call="website.layout"/>
+            Hello All
+        </t>
+    </template>
+</odoo>
