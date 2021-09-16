@@ -51,20 +51,35 @@ class MaterialData(models.Model):
         return error
         
     def api_create(self, vals):
-        """ Creating Data via API endpoint """
-        error = super(MaterialData, self).validate()
+        """ Creating Data via API endpoint 
+            @schema - vals need to be filled """
+
+        # Validate data if there's error
+        error = self.validate(vals)
         if len(error):
             return error
+
+        # If there's no error, api_create will trigger super().create
+        # and return object if success
         res = super(MaterialData, self).create(vals)
         error.append({'msg': "Data Successfully Added", "code":"SUCCESS"})
         return error
 
     def api_update(self, vals):
-        """ Creating Data via API endpoint """
+        """ Updating Data via API endpoint 
+            @schema - vals need to be filled
+            { 
+                'id' : YOUR_RECORD_ID,
+                'name' : YOUR_RECORD_NAME
+            }
+            id need to be filled with your record id you want to update """
 
-        error = super(MaterialData, self).validate()
+        # Validate vals data if there's error
+        error = self.validate(vals)
         if len(error):
             return error
+
+        # If there's no error, action update is executed
         res = super(MaterialData, self).search([('id','=',vals.get('id'))])
         for record in res:
             record.write(vals)
