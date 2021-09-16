@@ -14,12 +14,14 @@
                 </t>
 
                 <!-- Delete Button Actions -->
-                <form role="form" action="" method="POST" class="my-2">
-                    <input type="hidden" name="id" t-att-value="material['id']" />
-                    <input type="submit" class="btn btn-danger" value="Delete Data"/>
-                    <input type="hidden" name="request_type" value="delete" />
-                </form>
-
+                <t t-if="material['id'] != ''">
+                    <form role="form" action="" method="POST" class="my-2">
+                        <input type="hidden" name="id" t-att-value="material['id']" />
+                        <input type="submit" class="btn btn-danger" value="Delete Data"/>
+                        <input type="hidden" name="request_type" value="delete" />
+                    </form>
+                </t>
+                
                 <!-- Add and Update Actions-->
                 <form role="form" action="" method="POST" class="my-4">
                     <input type="hidden" name="redirect_to" value="/materials/new" />

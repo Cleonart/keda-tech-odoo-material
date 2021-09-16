@@ -71,6 +71,9 @@ class ControllerApiMaterial(http.Controller):
     @http.route(['/api/v1/materials/mutation'], csrf=False, type="http", auth="public")
     def api_material_delete(self, **kwargs):
         res = request.env['materials.material'].sudo()
+        return res.api_delete({
+            'id': int(kwargs.get('id'))
+        })
 
 class ControllerActionMaterial(ControllerApiMaterial):
     """ Controlling Button Action in Material """
@@ -80,12 +83,12 @@ class ControllerActionMaterial(ControllerApiMaterial):
         # Do a mutation [add/update]
         if kwargs.get('request_type') == 'mutate':
             res = self.api_material_mutation(**kwargs)
-            return res
+            return json.loads(res.data)
 
         # Do a delete
         elif kwargs.get('request_type') == 'delete':
             res = self.api_material_delete(**kwargs)
-            return res
+            return (res)
 
 class ControllerUiMaterial(ControllerActionMaterial):
 
@@ -98,12 +101,9 @@ class ControllerUiMaterial(ControllerActionMaterial):
                          'create_date', 'write_uid', 'write_date', '__last_update']
         error = []
         method = str(request.httprequest.method)
-        print(method)
 
-        if method == 'POST':        
-            trs = self.material_action_update(**kwargs)
-            print(json.loads(trs.data))
-            error = json.loads(trs.data)
+        if method == 'POST':
+           error = self.material_actions(**kwargs)
         
         id = kwargs.get('id')
 

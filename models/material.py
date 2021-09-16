@@ -91,6 +91,6 @@ class MaterialData(models.Model):
         if vals.get('id') and not vals.get('id') == "":
             res = super(MaterialData, self).search([('id','=',vals.get('id'))])
             for record in res:
-                record.unlink(vals)
+                record.unlink()
                 return [{'msg' : "Data Successfully Deleted", "code" : 'SUCCESS'}]
         return [{'msg' : "Data with corresponding id is not exists",'code' : "SUCCESS"}]
