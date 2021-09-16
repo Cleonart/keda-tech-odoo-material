@@ -46,7 +46,6 @@ class ControllerApiMaterial(http.Controller):
     def api_material_mutation(self, **kwargs):
         """ Do a mutation to database 
             only root and administrator is allowed """
-        print("**************** MUTATING ELEMEN *****************")
 
         # Mutate Edit
         if not kwargs.get("id") == "":
@@ -69,15 +68,24 @@ class ControllerApiMaterial(http.Controller):
 
         return json.dumps(res)
 
+    @http.route(['/api/v1/materials/mutation'], csrf=False, type="http", auth="public")
+    def api_material_delete(self, **kwargs):
+        res = request.env['materials.material'].sudo()
+
 class ControllerActionMaterial(ControllerApiMaterial):
     """ Controlling Button Action in Material """
 
-    def material_action_update(self, **kwargs):
-        res = (self.api_material_mutation(**kwargs))
-        return res
-        
-    def material_action_delete(self, **kwargs):
-        return (self.api_material_mutation(**kwargs))
+    def material_actions(self, **kwargs):
+
+        # Do a mutation [add/update]
+        if kwargs.get('request_type') == 'mutate':
+            res = self.api_material_mutation(**kwargs)
+            return res
+
+        # Do a delete
+        elif kwargs.get('request_type') == 'delete':
+            res = self.api_material_delete(**kwargs)
+            return res
 
 class ControllerUiMaterial(ControllerActionMaterial):
 

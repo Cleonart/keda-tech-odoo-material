@@ -85,3 +85,12 @@ class MaterialData(models.Model):
             record.write(vals)
             error.append({'msg': "Data Successfully Updated", "code":"SUCCESS"})
             return error
+
+    def api_delete(self, vals):
+        """ Delete Data via API endpoint """
+        if vals.get('id') and not vals.get('id') == "":
+            res = super(MaterialData, self).search([('id','=',vals.get('id'))])
+            for record in res:
+                record.unlink(vals)
+                return [{'msg' : "Data Successfully Deleted", "code" : 'SUCCESS'}]
+        return [{'msg' : "Data with corresponding id is not exists",'code' : "SUCCESS"}]
