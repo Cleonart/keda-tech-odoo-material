@@ -7,11 +7,10 @@
     'description' : """Material Management Module""",
     'category' : 'Productivity',
     'website' : '',
-    'depends' : [],
+    'depends' : ['website'],
     'data' : [
         'security/ir.model.access.csv',
-        'views/server.xml',
-        'views/material_new.xml',
+        'views/material/form.xml',
         'views/material.xml',
         'views/supplier.xml'
     ],
