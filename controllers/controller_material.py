@@ -75,6 +75,7 @@ class ControllerApiMaterial(http.Controller):
             'id': int(kwargs.get('id'))
         })
 
+
 class ControllerActionMaterial(ControllerApiMaterial):
     """ Controlling Button Action in Material """
 
@@ -90,21 +91,23 @@ class ControllerActionMaterial(ControllerApiMaterial):
             res = self.api_material_delete(**kwargs)
             return (res)
 
+
 class ControllerUiMaterial(ControllerActionMaterial):
 
     @http.route(['/materials/new',
                  '/materials/edit/<int:id>'], csrf=False, methods=['GET', 'POST'], website=True, auth="public")
     def material_form(self, **kwargs):
-            
-        # All of this fields will be ignored
-        ignore_fields = ['display_name', 'create_uid',
-                         'create_date', 'write_uid', 'write_date', '__last_update']
+        
         error = []
         method = str(request.httprequest.method)
 
-        if method == 'POST':
-           error = self.material_actions(**kwargs)
+        # All of this fields will be ignored
+        ignore_fields = ['display_name', 'create_uid',
+                         'create_date', 'write_uid', 'write_date', '__last_update']
         
+        if method == 'POST':
+            error = self.material_actions(**kwargs)
+
         id = kwargs.get('id')
 
         # Map Fields to new dictionary
@@ -136,3 +139,18 @@ class ControllerUiMaterial(ControllerActionMaterial):
                                'supplier': supplier,
                                'error': error})
 
+    @http.route('/', csrf=False, methods=['GET'], website=True, auth="public")
+    def material_index(self, **kwargs):
+        
+        # Get Data From API
+        res = self.api_material_list()
+
+        # Filter Input
+        filter_type = kwargs.get("filter_type")
+        if filter_type or filter_type != "":
+            res = self.api_material_list(type=filter_type)
+
+        materials = json.loads(res.data)
+        return request.render("material_management_module.material_list",
+                              {'materials': materials,
+                               'filter_type' : filter_type})
